@@ -1,0 +1,153 @@
+<!doctype html>
+
+<title>Student toevoegen</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="CssSheet.css">
+<link rel="shortcut icon" type="image/png" href="https://www.qien.nl/wp-content/uploads/2018/07/cropped-Qien-logo-32x32.png"/>
+
+
+<script>
+
+    const apiBase = "http://localhost:8080/api/student/AddStudent";
+
+    function createData() {
+        var api = apiBase;
+        var student = {}
+        // var karakterEigenschappen = [document.getElementById("karaktereigenschappen").value];
+        // var vaardigheden = [document.getElementById("vaardigheden").value];
+        //^^null value error bij karaktereigenschappen en vaardigheden omdat array is
+
+
+        student.voornaam = document.getElementById("voornaam").value;
+        student.achternaam = document.getElementById("achternaam").value;
+        student.straatnaam = document.getElementById("straatnaam").value;
+        student.huisnummer = document.getElementById("huisnummer").value;
+        student.postcode = document.getElementById("postcode").value;
+        student.woonplaats = document.getElementById("woonplaats").value;
+        student.telefoonnummer = document.getElementById("telefoonnummer").value;
+        student.emailadres = document.getElementById("emailadres").value;
+        var e = document.getElementById("opleidingsniveau");
+        student.opleidingsniveau = e.options[e.selectedIndex].value;
+        // document.getElementById("opleidingsniveau").value;
+        student.beschikbaarheid = document.getElementById("beschikbaarheid").value;
+        // student.vaardigheden = vaardigheden;
+        // student.karaktereigenschappen = karakterEigenschappen;
+        console.log(api);
+        console.log(student);
+        console.log(JSON.stringify(student));
+
+
+
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 202) {
+                // document.getElementById("tempVeld").innerHTML = this.responseText;
+            }
+        };
+        xhttp.open("POST", api, true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send(JSON.stringify(student));
+        window.location.replace("file:///C:/Users/lbmar/Desktop/Qien/html/SqraperStudentenoverzicht.html");
+    }
+
+
+
+
+</script>
+
+
+
+<body>
+
+    <ul>
+        <li class='active'><a href='https://www.qien.nl/'><img src="https://www.qien.nl/wp-content/uploads/2017/10/logo.svg" alt="Qien"></a></li>
+        <li><a href='SqraperHoofdpagina.html'>Vacatures</a></li>
+        <li><a href='SqraperStudentenoverzicht.html'>Studenten overzicht</a></li>
+        
+    </ul>
+
+    <div id="main">
+        <div class="toevoegen">
+            <table>
+                <div class="toevoegTitel"> <tr >Voeg een student toe:</tr> <br /></div>
+                
+                <tr></tr>
+                <tr>
+                    <td>Voornaam:</td>
+                    <td><input type="text" id="voornaam" /></td>
+                </tr>
+                <tr>
+                    <td>Achternaam:</td>
+                    <td> <input type="text" id="achternaam" /></td>
+
+                </tr>
+                <tr>
+                    <td>Straatnaam</td>
+                    <td> <input type="text" id="straatnaam" /></td>
+
+                </tr>
+                <tr>
+                    <td>Huisnummer:</td>
+                    <td> <input type="text" id="huisnummer" /></td>
+
+                </tr>
+                <tr>
+                    <td>Postcode:</td>
+                    <td> <input type="text" id="postcode" /></td>
+
+                </tr>
+
+                <tr>
+                    <td>Woonplaats:</td>
+                    <td> <input type="text" id="woonplaats" /></td>
+
+                </tr>
+                <tr>
+                    <td>Telefoon nr.:</td>
+                    <td> <input type="text" id="telefoonnummer" /></td>
+
+                </tr>
+                <tr>
+                    <td>E-mailadres:</td>
+                    <td> <input type="text" id="emailadres" /></td>
+
+                </tr>
+                <tr>
+                    <td>Opleidingsniveau:</td>
+                    <td><select id="opleidingsniveau" name="niveau">
+                            <option id="1" value="WO">WO</option>
+                            <option id="2" value="HBO">HBO</option>
+                            <option id="3" value="MBO">MBO</option>
+                        </select>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>Beschikbaarheid:</td>
+                    <td> <input type="text" id="beschikbaarheid" /></td>
+
+                </tr>
+                <tr>
+                    <td>Vaardigheden:</td>
+                    <td> <input type="text" id="vaardigheden" /></td>
+
+                </tr>
+                <tr>
+                    <td>Karaktereigenschappen:</td>
+                    <td> <input type="text" id="karakterEigenschappen" /></td>
+
+                </tr>
+                <tr>
+                    <td><button onclick="createData()">Opslaan</button></td>
+
+
+                </tr>
+            </table>
+
+        </div>
+        <nav></nav>
+        <aside></aside>
+    </div>
+
+</body>

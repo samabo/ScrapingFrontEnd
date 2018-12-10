@@ -1,0 +1,142 @@
+<!doctype html>
+
+<title>Studenten Overzicht</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="CssSheet.css">
+<link rel="shortcut icon" type="image/png" href="https://www.qien.nl/wp-content/uploads/2018/07/cropped-Qien-logo-32x32.png"/>
+
+
+
+
+<script>
+
+    const apiBase = "http://localhost:8080/api/student";
+    function getData() {
+        var api = apiBase + "/allStudents";
+        console.log(api);
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+
+                var studentHtml = document.createElement("Table");
+                studentHtml.className = "tabelNaam";
+                voegHeaderToe(studentHtml);
+                document.getElementById("student").appendChild(studentHtml);
+                var studentTabel = JSON.parse(this.responseText);
+                console.log(studentTabel.length);
+                for (var i = 0; i < studentTabel.length; i++) {
+                    voegStudentAanTabelToe(studentHtml, studentTabel[i]);
+                    console.log(studentTabel[i].voornaam);
+                    console.log(studentTabel[i].woonplaats);
+
+                }
+                console.log(JSON.parse(this.responseText));
+            }
+        };
+        xhttp.open("GET", api);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send();
+    }
+
+    function updateStudent(id) {
+       var queryString = "?para1=" + id;
+        window.location.replace("file:///C:/Users/lbmar/Desktop/Qien/html/SqraperStudentenUpdaten.html" + queryString);
+    }
+
+    function deleteStudent(id) {
+        var api = apiBase;
+        
+       // var id = document.getElementById("student").value;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                document.getElementById("tempVeld").innerHTML = this.status;
+                console.log(this.status);
+            }
+        };
+        xhttp.open("DELETE", api + "/" + id);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send();
+        location.reload(); // Delete werkt soms wel en soms weer niet?
+    }
+
+    function voegStudentAanTabelToe(tabel, student) {
+        var row = voegElementToe(tabel, "tr");
+        voegElementTxtToe(row, "td", student.voornaam);
+        voegElementTxtToe(row, "td", student.woonplaats);
+        voegElementTxtToe(row, "td", student.opleidingsniveau);
+        var button = voegElementToe(row, "button");
+        var button2 = voegElementToe(row, "button");
+        button.addEventListener("click", function () {
+            updateStudent(student.id);
+        });
+
+        button2.addEventListener("click", function () {
+            deleteStudent(student.id);
+            
+
+        });
+
+        var t = document.createElement("img");
+        t.src = "https://img.icons8.com/material/20/000000/installing-updates.png";
+        button.appendChild(t);
+        button.className = "studentenUpdateButton";
+
+
+        var y = document.createElement("img");
+        y.src="https://img.icons8.com/ios/20/000000/waste-filled.png";
+        button2.appendChild(y);
+        button2.className = "studentenDeleteButton";
+    }
+
+    function voegHeaderToe(tabel) {
+        var header = voegElementToe(tabel, "thead");
+        header.className = "headerNaam";
+        var row = voegElementToe(header, "tr");
+        row.className = "tabelRow";
+        voegElementTxtToe(row, "td", "Voornaam");
+        voegElementTxtToe(row, "td", "Woonplaats");
+        voegElementTxtToe(row, "td", "Opleiding");
+        voegElementTxtToe(row, "td", "");
+    }
+    function voegElementToe(ouder, elm) {
+        var x = document.createElement(elm)
+        ouder.appendChild(x);
+        x.className = "tabelRow2";
+        return x;
+    }
+    function voegElementTxtToe(ouder, elm, txt) {
+        var x = document.createElement(elm);
+        x.innerHTML = txt;
+        ouder.appendChild(x);
+        x.className = "tabelElement";
+        return x;
+    }
+
+</script>
+
+
+
+<body onload="getData()">
+
+    <ul>
+        <li class='active'><a href='https://www.qien.nl/'><img src="https://www.qien.nl/wp-content/uploads/2017/10/logo.svg" alt="Qien"></a></li>
+        <li><a href='SqraperHoofdpagina.html'>Vacatures</a></li>
+        <li><a href='SqraperStudentenoverzicht.html'>Studenten overzicht</a></li>
+        <li><a href='SqraperStudentenToevoegen.html'>Voeg student toe</a></li>
+    </ul>
+
+
+    <div id="main">
+        <div>
+            
+            <div class="studenten" id="student">
+
+            </div>
+        </div>
+        <nav></nav>
+        <aside></aside>
+    </div>
+
+</body>

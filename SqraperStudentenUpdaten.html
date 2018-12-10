@@ -1,0 +1,296 @@
+<html>
+
+<title>Student updaten</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="CssSheet.css">
+<link rel="shortcut icon" type="image/png" href="https://www.qien.nl/wp-content/uploads/2018/07/cropped-Qien-logo-32x32.png"/>
+
+<script>
+
+    var queryString = decodeURIComponent(window.location.search);
+    console.log(queryString);
+    id = queryString.substring(7);
+    console.log(id);
+
+    const apiBase = "http://localhost:8080/api/student";
+    function getData() {
+        console.log(id);
+        var api = apiBase + "/" + id;
+        console.log(api);
+        console.log(student);
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+
+                var studentHtml = document.createElement("Table");
+                studentHtml.className = "tabelNaam";
+                //voegHeaderToe(studentHtml);
+                document.getElementById("student").appendChild(studentHtml);
+                const keys = Object.keys(JSON.parse(this.responseText));
+                console.log(keys);
+                console.log(keys[1]);
+                console.log(keys[2]);
+                var infoTabel = JSON.parse(this.responseText);
+                console.log(infoTabel);
+                console.log(infoTabel.voornaam);
+                var x = document.createElement(infoTabel.voornaam);
+                document.getElementById('voornaam2').innerHTML = infoTabel.voornaam;
+                document.getElementById('achternaam2').innerHTML = infoTabel.achternaam;
+                document.getElementById('straatnaam2').innerHTML = infoTabel.straatnaam;
+                document.getElementById('huisnummer2').innerHTML = infoTabel.huisnummer;
+                document.getElementById('postcode2').innerHTML = infoTabel.postcode;
+                document.getElementById('woonplaats2').innerHTML = infoTabel.woonplaats;
+                document.getElementById('telefoonnummer2').innerHTML = infoTabel.telefoonnummer;
+                document.getElementById('emailadres2').innerHTML = infoTabel.emailadres;
+                document.getElementById('opleidingsniveau2').innerHTML = infoTabel.opleidingsniveau;
+                document.getElementById('beschikbaarheid2').innerHTML = infoTabel.beschikbaarheid;
+                document.getElementById('vaardigheden2').innerHTML = infoTabel.vaardigheden;
+                //document.getElementById('karaktereigenschappen2').innerHTML = infoTabel.karaktereigenschappen;
+                //^^ keigenschappen geeft nog error
+
+                console.log(JSON.parse(this.responseText));
+            }
+        };
+        xhttp.open("GET", api);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send();
+    }
+
+
+    function updateData() {
+        console.log(1);
+
+
+        console.log(id);
+        var api = apiBase + "/" + id;
+        console.log(api);
+        console.log(student);
+
+
+
+        console.log(document.getElementById("voornaam2").innerText);
+        var van = "voornaam2".value;
+        console.log(van);
+
+
+        var student = {}
+        student.id = id;
+
+        if (document.getElementById("voornaam").value == "") {
+
+            student.voornaam = document.getElementById('voornaam2').innerText;
+            console.log(student.voornaam);
+        } else {
+            student.voornaam = document.getElementById("voornaam").value;
+        }
+        if (document.getElementById("achternaam").value == "") {
+            student.achternaam = document.getElementById("achternaam2").innerText;
+        } else {
+            student.achternaam = document.getElementById("achternaam").value;
+        }
+        if (document.getElementById("straatnaam").value == "") {
+            student.straatnaam = document.getElementById("straatnaam2").innerText;
+
+        } else {
+            student.straatnaam = document.getElementById("straatnaam").value;
+        }
+        if (document.getElementById("huisnummer").value == "") {
+            student.huisnummer = document.getElementById("huisnummer2").innerText;
+
+        } else {
+            student.huisnummer = document.getElementById("huisnummer").value;
+        }
+
+        if (document.getElementById("postcode").value == "") {
+            student.postcode = document.getElementById("postcode2").innerText;
+
+        } else {
+            student.postcode = document.getElementById("postcode").value;
+        }
+        if (document.getElementById("woonplaats").value == "") {
+            student.woonplaats = document.getElementById("woonplaats2").innerText;
+
+        } else {
+            student.woonplaats = document.getElementById("woonplaats").value;
+        }
+        if (document.getElementById("telefoonnummer").value == "") {
+            student.telefoonnummer = document.getElementById("telefoonnummer2").innerText;
+
+        } else {
+            student.telefoonnummer = document.getElementById("telefoonnummer").value;
+        }
+        if (document.getElementById("emailadres").value == "") {
+            student.emailadres = document.getElementById("emailadres2").innerText;
+
+        } else {
+            student.emailadres = document.getElementById("emailadres").value;
+        }
+        var e = document.getElementById("opleidingsniveau");
+        if (student.opleidingsniveau == e) {
+            student.opleidingsniveau = document.getElementById("opleidingsniveau2");//hier nog even naar kijken
+        } else {
+            student.opleidingsniveau = e.options[e.selectedIndex].value;
+        }
+        if (document.getElementById("beschikbaarheid").value == "") {
+            student.beschikbaarheid = document.getElementById("beschikbaarheid2").innerText;
+
+        } else {
+            student.beschikbaarheid = document.getElementById("beschikbaarheid").value;
+        }
+        // if (document.getElementById("vaardigheden").value == null) {
+        //     student.vaardigheden = document.getElementById("vaardigheden2").innerText;
+
+        // } else {
+        //     student.vaardigheden = document.getElementById("vaardigheden").value;
+        // }
+        // if (document.getElementById("karaktereigenschappen").value == null) {
+        //     student.karaktereigenschappen = document.getElementById("karaktereigenschappen2").innerText;
+
+        // } else {
+        //     student.karaktereigenschappen = document.getElementById("karaktereigenschappen").value;
+        // }
+
+
+
+        console.log(student);
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                //document.getElementById("TempVeld").innerHTML = this.responseText;
+            }
+        };
+
+        xhttp.open("PUT", api, true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        console.log(JSON.stringify(student));
+        xhttp.send(JSON.stringify(student));
+        location.reload();
+    }
+
+
+</script>
+
+
+
+<body onload="getData()">
+
+    <ul>
+        <li class='active'><a href='https://www.qien.nl/'><img src="https://www.qien.nl/wp-content/uploads/2017/10/logo.svg" alt="Qien"></a></li>
+        <li><a href='SqraperHoofdpagina.html'>Vacatures</a></li>
+        <li><a href='SqraperStudentenoverzicht.html'>Studenten overzicht</a></li>
+        <li><a href='SqraperStudentenToevoegen.html'>Voeg student toe</a></li>
+    </ul>
+
+
+    <div id="main">
+        <div>
+
+            <div class="studenten" id="student">
+                <table>
+
+                    <tr class="toevoegTitel">
+                        <td></td>
+                        <td></td>
+                        <td>Update veld</td>
+                    </tr> <br />
+                    <tr></tr>
+                    <tr>
+                        <td>Voornaam:</td>
+                        <td id="voornaam2"></td>
+                        <td><input type="text" id="voornaam" /></td>
+                    </tr>
+                    <tr>
+                        <td>Achternaam:</td>
+                        <td id="achternaam2"></td>
+                        <td> <input type="text" id="achternaam" /></td>
+
+                    </tr>
+                    <tr>
+                        <td>Straatnaam</td>
+                        <td id="straatnaam2"></td>
+                        <td> <input type="text" id="straatnaam" /></td>
+
+                    </tr>
+                    <tr>
+                        <td>Huisnummer:</td>
+                        <td id="huisnummer2"></td>
+                        <td> <input type="text" id="huisnummer" /></td>
+
+                    </tr>
+                    <tr>
+                        <td>Postcode:</td>
+                        <td id="postcode2"></td>
+                        <td> <input type="text" id="postcode" /></td>
+
+                    </tr>
+
+                    <tr>
+                        <td>Woonplaats:</td>
+                        <td id="woonplaats2"></td>
+                        <td> <input type="text" id="woonplaats" /></td>
+
+                    </tr>
+                    <tr>
+                        <td>Telefoon nr.:</td>
+                        <td id="telefoonnummer2"></td>
+                        <td> <input type="text" id="telefoonnummer" /></td>
+
+                    </tr>
+                    <tr>
+                        <td>E-mailadres:</td>
+                        <td id="emailadres2"></td>
+                        <td> <input type="text" id="emailadres" /></td>
+
+                    </tr>
+                    <tr>
+                        <td>Opleidingsniveau:</td>
+                        <td id="opleidingsniveau2"></td>
+                        <td><select id="opleidingsniveau" name="niveau">
+                                <option id="1" value="WO">WO</option>
+                                <option id="2" value="HBO">HBO</option>
+                                <option id="3" value="MBO">MBO</option>
+                            </select>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>Beschikbaarheid:</td>
+                        <td id="beschikbaarheid2"></td>
+                        <td> <input type="text" id="beschikbaarheid" /></td>
+
+                    </tr>
+                    <tr>
+                        <td>Vaardigheden:</td>
+                        <td id="vaardigheden2"></td>
+                        <td> <input type="text" id="vaardigheden" /></td>
+
+                    </tr>
+                    <tr>
+                        <td>Karaktereigenschappen:</td>
+                        <td id="karakterEigenschappen2"></td>
+                        <td> <input type="text" id="karakterEigenschappen" /></td>
+
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td><button onclick="updateData()">updaten</button></td>
+
+
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <nav></nav>
+        <aside></aside>
+    </div>
+
+</body>
+
+
+
+
+
+</html>
