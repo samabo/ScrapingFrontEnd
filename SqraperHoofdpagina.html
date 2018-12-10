@@ -1,0 +1,160 @@
+<!doctype html>
+
+<title>Hoofdpagina</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="CssSheet.css">
+<link rel="shortcut icon" type="image/png" href="https://www.qien.nl/wp-content/uploads/2018/07/cropped-Qien-logo-32x32.png"/>
+
+
+<script>
+
+    const apiBase = "http://localhost:8080/api/vacature";
+    function getData() {
+        var api = apiBase;
+        console.log(api);
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                //document.getElementById("vacature").innerHTML = this.responseText;
+                var vacatureHtml = document.createElement("Table");
+                vacatureHtml.className = "tabelNaam";
+                voegHeaderToe(vacatureHtml);
+                document.getElementById("vacature").appendChild(vacatureHtml);
+                var vacatureTabel = JSON.parse(this.responseText);
+                console.log(vacatureTabel.length);
+                for (var i = 0; i < vacatureTabel.length; i++) {
+                    voegVacatureAanTabelToe(vacatureHtml, vacatureTabel[i]);
+                    console.log(vacatureTabel[i].titel);
+                    console.log(vacatureTabel[i].plaats);
+                    for (var j = 0; j < vacatureTabel[i].studenten.length; j++) {
+                        console.log(vacatureTabel[i].studenten[j].voornaam);
+                    }
+                }
+                console.log(JSON.parse(this.responseText));
+            }
+        };
+        xhttp.open("GET", api);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send();
+    }
+    function createData() {
+        var api = apiBase;
+        var kandidaat = {}
+        kandidaat.naam = document.getElementById("naam").value;
+        kandidaat.woonplaats = document.getElementById("woonplaats").value;
+        kandidaat.opleidingsniveau = document.getElementById("opleidingsniveauDD").value;
+        console.log(api);
+        console.log(kandidaat);
+        console.log(JSON.stringify(kandidaat));
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 202) {
+                document.getElementById("tempVeld").innerHTML = this.responseText;
+            }
+        };
+        xhttp.open("POST", api, true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send(JSON.stringify(kandidaat));
+    }
+
+  function deleteVacature(id) {
+        var api = apiBase;
+        
+       // var id = document.getElementById("student").value;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                document.getElementById("tempVeld").innerHTML = this.status;
+                console.log(this.status);
+            }
+        };
+        xhttp.open("DELETE", api + "/" + id);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send();
+        location.reload(); // Delete werkt soms wel en soms weer niet?
+    }
+
+    function voegVacatureAanTabelToe(tabel, vacature) {
+        var row = voegElementToe(tabel, "tr");
+        voegElementTxtToe(row, "td", vacature.titel);
+        voegElementTxtToe(row, "td", vacature.plaats);
+        voegElementTxtToe(row, "td", vacature.omschrijving);
+       // var button = voegElementToe(row, "button");
+        var button1 = voegElementToe(row, "button");
+        var button2 = voegElementToe(row, "button");
+
+        button2.addEventListener("click", function () {
+            deleteVacature(vacature.id);
+        });
+
+
+        // var t = document.createTextNode("Bekijken");
+        // button.appendChild(t);
+        // button.className = "vacatureLinkButton";
+
+        var x = document.createElement("img");
+        x.src = "https://img.icons8.com/metro/20/star.png";
+        
+        button1.appendChild(x);
+        button1.className = "favorietButton";
+
+        var y = document.createElement("img");
+        y.src="https://img.icons8.com/ios/20/000000/waste-filled.png";
+        button2.appendChild(y);
+        button2.className = "vacatureDeleteButton";
+    }
+
+    function voegHeaderToe(tabel) {
+        var header = voegElementToe(tabel, "thead");
+        header.className = "headerNaam";
+        var row = voegElementToe(header, "tr");
+        row.className = "tabelRow";
+        voegElementTxtToe(row, "td", "Functie");
+        voegElementTxtToe(row, "td", "Plaats");
+        voegElementTxtToe(row, "td", "Omschrijving");
+        voegElementTxtToe(row, "td", " ");
+    }
+
+    function voegElementToe(ouder, elm) {
+        var x = document.createElement(elm)
+        ouder.appendChild(x);
+        x.className = "tabelRow2";
+        return x;
+    }
+
+    function voegElementTxtToe(ouder, elm, txt) {
+        var x = document.createElement(elm);
+        x.innerHTML = txt;
+        ouder.appendChild(x);
+        x.className = "tabelElement";
+        return x;
+    }
+
+</script>
+
+
+
+<body onload="getData()">
+
+    <ul>
+        <li class='active'><a href='https://www.qien.nl/'><img src="https://www.qien.nl/wp-content/uploads/2017/10/logo.svg" alt="Qien"></a></li>
+        <li><a href='SqraperHoofdpagina.html'>Vacatures</a></li>
+        <li><a href='SqraperStudentenoverzicht.html'>Studenten overzicht</a></li>
+        
+    </ul>
+
+
+    <div id="main">
+        <div>
+
+            <div class="vacatures" id="vacature">
+                <div class="vac-overzichtTitel"> Vacature overzicht
+                </div>
+            </div>
+        </div>
+        <nav></nav>
+        <aside></aside>
+    </div>
+
+</body>
